@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Linked List by Januario Cipriano" />
+    <title>Linked List</title>
+    <style>
+      body {
+        background: #f2f7f8;
+      }
+      #root {
+        margin: auto;
+        width: 70%;
+        margin-top: 100px;
+      }
+      .top-div {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: flex-end;
+      }
+      .row,
+      .insertions {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      input[type="text"],
+      #select-div,
+      #created-nod-div {
+        height: 32px;
+        width: 100%;
+        outline: none;
+        padding-left: 6px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      #select-div,
+      #created-nod-div {
+        height: 37px;
+      }
+      input[type="text"]:focus {
+        outline: 1px solid lightblue;
+      }
+      input[type="submit"] {
+        width: 180px;
+        height: 32px;
+        outline: none;
+        padding-left: 6px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #61dafb;
+        transition: all 0.1s;
+      }
+      input[type="submit"]:active {
+        transform: scale(1.01);
+        background-color: #30afd1;
+      }
+      .btn-div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+      }
+      .linked-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: center;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        margin-top: 20px;
+        padding: 10px;
+      }
+      .node-error,
+      .operation-error {
+        color: red;
+        font-style: italic;
+      }
+      .node {
+        width: 45px;
+        height: 45px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        opacity: 0.7;
+        font-size: 13px;
+        margin: 5px;
+      }
+      .arrow {
+        opacity: 0.7;
+      }
+      .div-arrow {
+        display: flex;
+        justity-content: center;
+        align-items: center;
+      }
+      .hide-elem {
+        display: none;
+      }
+      .select-node {
+        font-size: 13px;
+        color: #333;
+        font-weight: bold;
+        opacity: 0.6;
+      }
+      .title {
+        font-size: 30px;
+        text-align: center;
+        opacity: 0.7;
+        border-bottom: 2px solid #444;
+        margin-bottom: 30px;
+        padding-bottom: 10px;
+      }
+      .footer {
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        font-style: italic;
+        margin-top: 30px;
+        border-radius: 6px;
+        padding-right: 10px;
+        background-image: linear-gradient(to left, #30afd1, white, #f2f7f8);
+      }
+      .remarks {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-style: italic;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <h3 class="title">Linked List</h3>
+      <div class="top-div">
+        <div class="insertions">
+          <span class="operation-error"></span>
+          <select id="select-div">
+            <option value="default">Select operation</option>
+            <option value="before">Before</option>
+            <option value="after">After</option>
+            <option value="remove">Remove</option>
+          </select>
+        </div>
+        <div class="created-nodes">
+          <span class="select-node">Select node</span>
+          <select id="created-nod-div"></select>
+        </div>
+        <div class="row">
+          <span class="node-error"></span>
+          <input
+            type="text"
+            id="node-value"
+            placeholder="Enter node"
+            value="Head"
+          />
+        </div>
+      </div>
+      <div class="btn-div">
+        <input type="submit" class="btn" value="Submit" />
+      </div>
+      <div class="remarks">
+        <span class="observation"></span>
+      </div>
+      <div class="linked-list"></div>
+      <div class="footer">
+        <p>By Januario Cipriano</p>
+      </div>
+    </div>
+
+    <script>
+      let btn = document.querySelector(".btn");
+      let nodeError = document.querySelector(".node-error");
+      let operationError = document.querySelector(".operation-error");
+      let node = document.querySelector("#node-value");
+      let operation = document.querySelector("#select-div");
+      let linked_list = document.querySelector(".linked-list");
+      let createdNodes = document.querySelector("#created-nod-div");
+      let observation = document.querySelector(".observation");
+
+      operation.addEventListener("change", (e) => {
+        observation.textContent = "";
+        if (e.target.value === "remove") {
+          node.classList.add("hide-elem");
+        } else {
+          node.classList.remove("hide-elem");
+        }
+      });
+
+      function appendNodes(nodes) {
+        linked_list.innerHTML = "";
+        for (let node_ of nodes) {
+          let p = document.createElement("p");
+          p.textContent = node_;
+          p.classList.add("node");
+          let arrow = document.createElement("span");
+          arrow.textContent = "→";
+          arrow.classList.add("arrow");
+          let div = document.createElement("div");
+          div.classList.add("div-arrow");
+          div.appendChild(p);
+          div.appendChild(arrow);
+          linked_list.appendChild(div);
+
+          createdNodes.innerHTML = "";
+          for (let div_ of linked_list.childNodes) {
+            let p = div_.childNodes[0];
+            let option = document.createElement("option");
+            option.value = p.textContent;
+            option.textContent = p.textContent;
+            createdNodes.appendChild(option);
+          }
+        }
+      }
+
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (operation.value !== "default" && node.value !== "") {
+          nodeError.textContent = "";
+          operationError.textContent = "";
+
+          if (operation.value === "remove") {
+            let nodes = [];
+            for (let div_ of linked_list.childNodes) {
+              let p = div_.childNodes[0];
+              nodes.push(p.textContent);
+            }
+
+            let data = {
+              nodes: nodes,
+              target_node: createdNodes.value,
+            };
+
+            fetch("/remove_node/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                let newNodes = data.nodes;
+                appendNodes(newNodes);
+                observation.textContent = `Removed "${createdNodes.value}"`;
+                setTimeout(() => {
+                  observation.textContent = "";
+                }, 1700);
+              })
+              .catch((err) => console.log(err));
+          } else {
+            let nodes = [];
+            for (let div_ of linked_list.childNodes) {
+              let p = div_.childNodes[0];
+              nodes.push(p.textContent);
+            }
+
+            let data = {
+              operation: operation.value,
+              target_node: createdNodes.value,
+              new_node: node.value,
+              nodes: nodes,
+            };
+
+            fetch("/linked_list_api/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                let newNodes = data.nodes;
+                appendNodes(newNodes);
+              })
+              .catch((err) => console.log(err));
+          }
+        } else {
+          if (operation.value === "default") {
+            operationError.textContent = "Select operation";
+          } else {
+            operationError.textContent = "";
+          }
+
+          if (node.value === "") {
+            nodeError.textContent = "Enter node value";
+          } else {
+            nodeError.textContent = "";
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
