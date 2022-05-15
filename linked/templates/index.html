@@ -192,6 +192,11 @@
       let linked_list = document.querySelector(".linked-list");
       let createdNodes = document.querySelector("#created-nod-div");
       let observation = document.querySelector(".observation");
+      let nodeToRemove = null;
+
+      createdNodes.addEventListener("change", (e) => {
+        nodeToRemove = e.target.value;
+      });
 
       operation.addEventListener("change", (e) => {
         observation.textContent = "";
@@ -240,6 +245,7 @@
               let p = div_.childNodes[0];
               nodes.push(p.textContent);
             }
+            nodeToRemove = createdNodes.value;
 
             let data = {
               nodes: nodes,
@@ -265,7 +271,8 @@
                   if (newNodes.length == 0) {
                     createdNodes.innerHTML = "";
                   } else {
-                    observation.innerHTML = `<span>Removed <i style="font-weight: bold;">"${createdNodes.value}"</i></span>`;
+                    console.log(nodeToRemove);
+                    observation.innerHTML = `<span>Removed <i style="font-weight: bold;">"${nodeToRemove}"</i></span>`;
 
                     setTimeout(() => {
                       observation.textContent = "";
