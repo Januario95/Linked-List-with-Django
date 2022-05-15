@@ -73,10 +73,12 @@
         justify-content: flex-start;
         align-items: center;
         background-color: white;
-        border: 1px solid #ccc;
+        {% comment %} border: 1px solid #ccc; {% endcomment %}
         border-radius: 6px;
         margin-top: 20px;
         padding: 10px;
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+          rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
       }
       .node-error,
       .operation-error {
@@ -94,6 +96,8 @@
         opacity: 0.7;
         font-size: 13px;
         margin: 5px;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+          rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
       }
       .arrow {
         opacity: 0.7;
@@ -136,6 +140,7 @@
         align-items: center;
         font-style: italic;
         margin-top: 10px;
+        color: #1B9876;
       }
     </style>
   </head>
