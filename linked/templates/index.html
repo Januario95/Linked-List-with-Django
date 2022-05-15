@@ -245,24 +245,35 @@
               nodes: nodes,
               target_node: createdNodes.value,
             };
-
-            fetch("/remove_node/", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(data),
-            })
-              .then((res) => res.json())
-              .then((data) => {
-                let newNodes = data.nodes;
-                appendNodes(newNodes);
-                observation.textContent = `Removed "${createdNodes.value}"`;
-                setTimeout(() => {
-                  observation.textContent = "";
-                }, 1700);
+            if (nodes.length == 0) {
+              observation.textContent = "No Node to remove!";
+              setTimeout(() => {
+                observation.textContent = "";
+              }, 1700);
+            } else {
+              fetch("/remove_node/", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
               })
-              .catch((err) => console.log(err));
+                .then((res) => res.json())
+                .then((data) => {
+                  let newNodes = data.nodes;
+                  appendNodes(newNodes);
+                  if (newNodes.length == 0) {
+                    createdNodes.innerHTML = "";
+                  } else {
+                    observation.innerHTML = `<span>Removed <i style="font-weight: bold;">"${createdNodes.value}"</i></span>`;
+
+                    setTimeout(() => {
+                      observation.textContent = "";
+                    }, 1700);
+                  }
+                })
+                .catch((err) => console.log(err));
+            }
           } else {
             let nodes = [];
             for (let div_ of linked_list.childNodes) {
